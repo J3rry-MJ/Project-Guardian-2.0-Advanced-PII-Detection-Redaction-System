@@ -2,12 +2,12 @@
 
 ---
 
-## Summary (one line)
+## Summary
 Run a lightweight PII scanner at the cluster edge (Ingress plugin) with a local sidecar for heavy work, plus defensive layers for logs, mesh traffic and internal UIs — keep raw PII out of storage, keep latency tiny, and start in shadow mode.
 
 ---
 
-## Where it runs (primary)
+## Where it run
 •⁠  ⁠*Ingress layer*: NGINX or Kong as the recommended place to enforce PII redaction.
   - Intercepts all HTTP JSON payloads (ingress/egress).
   - No application code changes required.
@@ -16,7 +16,7 @@ Run a lightweight PII scanner at the cluster edge (Ingress plugin) with a local 
 
 ---
 
-## Small footprint architecture (simple view)
+## Small footprint architecture
 •⁠  ⁠*Edge (Ingress Controller)* — NGINX/Kong plugin (Lua or njs)
   - Streams body → Unix Domain Socket (UDS) → local sidecar ⁠ /scan ⁠
   - Receives redacted body → forwards to backend (Express + MCP)
@@ -31,7 +31,7 @@ Run a lightweight PII scanner at the cluster edge (Ingress plugin) with a local 
 
 ---
 
-## How requests flow (simple)
+## How requests flow
 1.⁠ ⁠Client → Ingress (TLS terminated).  
 2.⁠ ⁠Ingress plugin streams request/response body to sidecar using UDS.  
 3.⁠ ⁠Sidecar scans & returns redacted JSON quickly (⁠ [REDACTED] ⁠ fields).  
@@ -53,7 +53,7 @@ Run a lightweight PII scanner at the cluster edge (Ingress plugin) with a local 
 
 ---
 
-## Scale & cost model (simple)
+## Scale & cost model
 •⁠  ⁠*Sidecar as a Kubernetes Deployment* (or part of ingress pod if supported):
   - HPA: target CPU 60%, min=2 replicas, max=N by load.
   - Keep hot worker pool; reuse compiled regex across requests.
@@ -69,7 +69,7 @@ Run a lightweight PII scanner at the cluster edge (Ingress plugin) with a local 
 
 ---
 
-## Observability & guardrails (keep it simple)
+## Observability & guardrails
 •⁠  ⁠Expose Prometheus metrics:
   - ⁠ pii_scan_latency_ms ⁠ (p50/p95/p99)
   - ⁠ pii_detect_count{type=...} ⁠
@@ -82,7 +82,7 @@ Run a lightweight PII scanner at the cluster edge (Ingress plugin) with a local 
 
 ---
 
-## Rules & change management (easy ops)
+## Rules & change management
 •⁠  ⁠*Rulebook* stored in a ConfigMap (regex + field allow/deny lists).
 •⁠  ⁠*Hot reload* the sidecar when ConfigMap changes.
 •⁠  ⁠*Feature flags* to toggle categories: ⁠ names ⁠, ⁠ ids ⁠, ⁠ payments ⁠, ⁠ emails ⁠.
