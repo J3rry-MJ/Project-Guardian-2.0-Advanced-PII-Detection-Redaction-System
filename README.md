@@ -11,20 +11,6 @@ An efficient &amp; optimised solution for detecting and redacting Personally Ide
 
 ---
 
-## 🚀 How It Works
-
-1.⁠ ⁠Reads input CSV with columns:
-   - ⁠ record_id ⁠
-   - ⁠ data_json ⁠ (JSON string containing candidate records).
-2.⁠ ⁠Scans JSON fields for sensitive information (e.g., full candidate names).
-3.⁠ ⁠Redacts PII in real time and outputs a safe JSON string.
-4.⁠ ⁠Produces an output CSV with the following columns:
-   - ⁠ record_id ⁠
-   - ⁠ redacted_data_json ⁠ (masked JSON string)
-   - ⁠ is_pii ⁠ (Boolean flag)
-
----
-
 ## ▶️ Usage
 
 ```bash
